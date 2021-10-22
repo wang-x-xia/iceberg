@@ -1,15 +1,20 @@
 /*
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 
 package org.apache.iceberg.dell;
@@ -41,10 +46,10 @@ public class EcsFileIO implements FileIO, Externalizable, AutoCloseable {
   private final AtomicBoolean closed = new AtomicBoolean(true);
 
   @Override
-  public void initialize(Map<String, String> properties) {
+  public void initialize(Map<String, String> inputProperties) {
     if (closed.compareAndSet(true, false)) {
-      this.properties = Collections.unmodifiableMap(new LinkedHashMap<>(properties));
-      this.client = EcsClientFactory.create(properties);
+      this.properties = Collections.unmodifiableMap(new LinkedHashMap<>(inputProperties));
+      this.client = EcsClientFactory.create(inputProperties);
     } else {
       log.error("Try to re-initialized the properties");
     }
@@ -77,8 +82,8 @@ public class EcsFileIO implements FileIO, Externalizable, AutoCloseable {
   @Override
   public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
     @SuppressWarnings("unchecked")
-    Map<String, String> properties = (Map<String, String>) in.readObject();
-    initialize(properties);
+    Map<String, String> inputProperties = (Map<String, String>) in.readObject();
+    initialize(inputProperties);
   }
 
   @Override
